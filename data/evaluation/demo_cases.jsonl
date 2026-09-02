@@ -1,0 +1,4 @@
+{"id":"remote-days","question":"How many days may employees work remotely?","expected_abstain":false,"expected_pages":[1],"keywords":["three days","manager approval"]}
+{"id":"security-reporting","question":"Where and how quickly must a security incident be reported?","expected_abstain":false,"expected_pages":[1],"keywords":["security@northstarlabs.example","one hour"]}
+{"id":"unknown-benefit","question":"What is the company's parental leave policy?","expected_abstain":true,"expected_pages":[],"keywords":[]}
+

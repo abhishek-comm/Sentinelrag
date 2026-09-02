@@ -1,0 +1,13 @@
+.env
+__pycache__/
+.pytest_cache/
+.coverage
+.venv/
+*.egg-info/
+tests/test.db
+work/
+data/app.db
+data/uploads/*
+!data/uploads/.gitkeep
+data/evaluation/results/*.json
+!data/evaluation/results/.gitkeep

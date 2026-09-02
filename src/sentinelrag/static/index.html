@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SentinelRAG | Evidence, not guesses</title>
+  <style>
+    :root { --ink:#e7edf8; --muted:#9eabc4; --line:#29334a; --accent:#65d5a5; --panel:#121a2a; --bg:#0a0f1b; }
+    * { box-sizing:border-box } body { margin:0; color:var(--ink); background:radial-gradient(circle at 85% 0,#18355a 0,transparent 32%),var(--bg); font:15px Inter,system-ui,sans-serif; }
+    main { max-width:1050px;margin:auto;padding:54px 24px } header {display:flex;justify-content:space-between;align-items:end;margin-bottom:34px} h1{margin:0;font-size:38px;letter-spacing:-1.8px} h1 span{color:var(--accent)} p{color:var(--muted);line-height:1.55}.tag{color:var(--accent);text-transform:uppercase;font-size:12px;letter-spacing:1.5px;font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:rgba(18,26,42,.88);border:1px solid var(--line);border-radius:14px;padding:22px}.wide{grid-column:span 2} label{display:block;margin-bottom:7px;color:var(--muted);font-size:13px}textarea,input{width:100%;color:var(--ink);background:#0c1322;border:1px solid #34415c;border-radius:9px;padding:12px;font:inherit}textarea{height:92px;resize:vertical}button{background:var(--accent);border:0;border-radius:8px;padding:11px 16px;color:#062117;font-weight:750;cursor:pointer;margin-top:12px}button.secondary{background:#273553;color:var(--ink);margin-left:8px}.answer{white-space:pre-wrap;line-height:1.6}.status{font-size:12px;padding:4px 8px;border-radius:999px;background:#1d3143;color:var(--accent)}.cite{border-left:2px solid var(--accent);margin:12px 0;padding:3px 11px;color:var(--muted);font-size:13px}.empty{color:var(--muted);font-style:italic}@media(max-width:700px){.grid{grid-template-columns:1fr}.wide{grid-column:span 1}header{display:block}h1{font-size:31px}}
+  </style>
+</head>
+<body><main>
+  <header><div><div class="tag">Citation-first document intelligence</div><h1>Sentinel<span>RAG</span></h1><p>Ask questions. Inspect evidence. Abstain from guessing.</p></div><div id="metrics" class="tag">Loading metrics…</div></header>
+  <section class="grid">
+    <div class="card"><h2>1. Add evidence</h2><label>PDF, DOCX, TXT, or Markdown</label><input id="file" type="file" accept=".pdf,.docx,.txt,.md"><button onclick="upload()">Upload document</button><p id="upload-status" class="empty">No document uploaded in this session.</p></div>
+    <div class="card"><h2>2. Ask a question</h2><label>SentinelRAG cites the retrieved evidence or abstains.</label><textarea id="question" placeholder="What does the remote-work policy say?"></textarea><button onclick="ask()">Ask SentinelRAG</button><button class="secondary" onclick="document.getElementById('question').value='How many remote days can employees work?'">Try demo</button></div>
+    <div class="card wide"><div style="display:flex;justify-content:space-between;align-items:center"><h2>Answer</h2><span id="status" class="status">Awaiting question</span></div><div id="answer" class="empty">Upload a document, then ask an evidence-backed question.</div><div id="citations"></div></div>
+  </section>
+</main><script>
+const byId=id=>document.getElementById(id);
+async function refresh(){const m=await fetch('/api/v1/metrics').then(r=>r.json());byId('metrics').textContent=`${m.documents} documents · ${m.traces} traced answers`}
+async function upload(){const f=byId('file').files[0];if(!f)return;const d=new FormData();d.append('file',f);byId('upload-status').textContent='Ingesting…';const r=await fetch('/api/v1/documents/upload',{method:'POST',body:d});const x=await r.json();byId('upload-status').textContent=r.ok?`✓ ${x.filename}: ${x.chunk_count} searchable chunks`:`Upload failed: ${x.detail}`;refresh()}
+async function ask(){const q=byId('question').value.trim();if(!q)return;byId('answer').textContent='Retrieving evidence…';byId('citations').innerHTML='';const r=await fetch('/api/v1/questions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});const x=await r.json();byId('answer').textContent=x.answer;byId('status').textContent=`${x.status} · ${x.confidence} confidence · ${x.latency_ms}ms`;byId('citations').innerHTML=(x.citations||[]).map(c=>`<div class="cite"><b>${c.filename}, page ${c.page}</b><br>${c.excerpt}</div>`).join('');refresh()}
+refresh();
+</script></body></html>

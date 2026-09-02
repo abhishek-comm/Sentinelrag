@@ -1,0 +1,14 @@
+Northstar Labs Employee Handbook
+
+Remote work policy
+Employees may work remotely up to three days each week with manager approval. Employees must work from within India unless Human Resources approves an exception in writing. Remote workers must remain available between 10:00 and 16:00 India Standard Time on business days.
+
+Information security
+Company documents may only be stored in company-approved storage. Personal email, public file-sharing links, and removable media must not be used for confidential information. Suspected security incidents must be reported to security@northstarlabs.example within one hour of discovery.
+
+Leave policy
+Full-time employees receive 18 paid days of annual leave per calendar year. Unused annual leave may be carried forward up to five days. Sick leave does not reduce annual leave.
+
+Expense policy
+Travel expenses require itemized receipts. Domestic flights must be booked at least 14 days in advance unless an executive approves an exception. The standard hotel limit is INR 6,000 per night excluding taxes.
+
