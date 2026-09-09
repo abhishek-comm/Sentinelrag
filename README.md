@@ -74,12 +74,9 @@ cp .env.example .env
 docker compose up --build
 ```
 
-## Interview talking points
+## Design notes
 
-1. **Why hybrid retrieval?** BM25 captures exact policy/product names while vector retrieval supplies a second similarity signal. RRF blends them without score calibration.
-2. **How is hallucination reduced?** Answers are conditioned on retrieved evidence, citations are mandatory, and a confidence gate abstains before generation.
-3. **What is evaluated?** Retrieval, citations, groundedness proxy, abstention correctness, latency, and feedback—not just fluent answers.
-4. **Production next steps:** replace SQLite with Postgres/pgvector, add a cross-encoder reranker, async ingestion workers, OpenTelemetry exporter, authentication, and dataset/version registries.
+SentinelRAG treats answer quality as a retrieval and evidence problem. Hybrid retrieval combines exact-term matching with vector similarity, while the evidence gate can abstain before generation when support is weak. The local SQLite and JSONL evaluation workflow keeps these behaviors inspectable; production deployments could add durable storage, asynchronous ingestion, telemetry, authentication, and versioned evaluation datasets.
 
 ## Limitations
 
